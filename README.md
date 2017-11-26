@@ -4,15 +4,17 @@ This project is a demo frontend application for querying weather-related data (f
 It was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.4, and uses the latest Angular: 5.0.3.
 
 
-## Development server
+## Running the Development servers
 
 cd makhtar-frontend
 
-* Run the weather backend app
+npm install
+
+* Run the backend weather app
 php -S localhost:9200 &
 
 * Serve the frontend
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. 
 
 ## Code scaffolding
 

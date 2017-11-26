@@ -4,11 +4,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { setTimeout } from 'timers';
 
+// Object for storing cities information
 export class City {
   constructor(
     public id: number = 0,
+    public woeid: number = 44418,
     public name: string = 'Undefined',
     public temperature: number = 0,
     public min_temp: number = 0,
@@ -29,6 +30,7 @@ export class WeatherService {
   headers = new HttpHeaders();
   ids: Array<number> = [];
 
+  // Retrieve default cities information
   getCities() {
 
     defaultCities.forEach(el => {
@@ -44,54 +46,57 @@ export class WeatherService {
           console.log(data[0].title, ' => ', this.woeid);
 
           this.http.get(srvUrl + 'command=location&woeid=' + this.woeid,
-          { headers: this.headers }).subscribe(cityData => {
+            { headers: this.headers }).subscribe(cityData => {
 
-            // Read the result field from the JSON response.
-            const tmp = cityData['consolidated_weather'][0];
-            this.tmpCity = new City(tmp.id, data[0].title, tmp.the_temp, tmp.min_temp, tmp.max_temp, tmp.weather_state_name);
-            this.cities.push(this.tmpCity);
-          });
+              // Read the result field from the JSON response.
+              const tmp = cityData['consolidated_weather'][0];
+              this.tmpCity = new City(tmp.id, this.woeid, data[0].title, tmp.the_temp, tmp.min_temp, tmp.max_temp, tmp.weather_state_name);
+              this.cities.push(this.tmpCity);
+            });
         });
     });
 
     //return this.cities;
-     return Observable.of(this.cities);
+    return Observable.of(this.cities);
   }
 
 
-  getCity(id: number): City {
+
+  // Retrieve a single city information by woeid
+  getCity(id: number): Observable<City> {
 
     this.http.get(srvUrl + 'command=location&woeid=' + id,
       { headers: this.headers }).subscribe(data => {
         if (!data) {
           console.log('No data retrieved for woeid', id);
-          return new City();
+          return Observable.of(new City());
         }
         try {
           // Read the result field from the JSON response.
           const tmp = data['consolidated_weather'][0];
           if (!tmp) {
             console.log('No data retrieved for woeid', id, data['consolidated_weather']);
-            return new City();
+            return Observable.of(new City());
           }
 
           this.tmpCity = new City(tmp.id,
+            id,
             data[0].title,
             tmp.the_temp,
             tmp.min_temp, tmp.max_temp,
             tmp.weather_state_name);
 
           this.cities.push(this.tmpCity);
-          Observable.of(this.cities);
-          return this.tmpCity;
+          // Observable.of(this.cities);
+          return Observable.of(this.tmpCity);
 
         } catch (e) {
-          return new City();
+          return Observable.of(new City());
         }
       });
 
     console.log('Early return for woeid', id);
-    return new City();
+    return Observable.of(new City());
   }
 
   constructor(private http: HttpClient) {

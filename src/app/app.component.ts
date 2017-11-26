@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-root', // weather 
+  template: ``,
 })
 export class AppComponent {
   title = 'Makhtar\'s Weather Demo app';
