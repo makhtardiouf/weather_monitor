@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,9 +8,7 @@
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
-  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"> {% comment %}
-  <link href="/assets/app.css" rel="stylesheet"> {% endcomment %}
-
+ 
   <base href="/">
 </head>
 
@@ -27,13 +24,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/home">Makhtar's Weather App</a>
+        <a class="navbar-brand" href="/#">Makhtar's Weather App</a>
       </div>
 
       <div class="collapse navbar-collapse" id="navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="#">Query Location</a>
+            <a routerLink="query">Query Location</a>
           </li>
 
           <li>
@@ -47,9 +44,14 @@
   </nav>
 
   <div class="container" style="padding:50px;">
-    <div class="row">
-      <app-root></app-root>
-    </div>
+      <div class="row">
+          <weather></weather>
+        </div>
+
+      <div class="row">
+          <router-outlet></router-outlet>
+        <app-root></app-root>
+      </div>
   </div>
 
   <hr/>
