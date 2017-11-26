@@ -16,6 +16,7 @@ export class WeatherComponent implements OnInit {
   cities$: Observable<City[]>;
   city$: Observable<City>;
 
+
   private woeid: number;
 
   constructor(
@@ -25,7 +26,7 @@ export class WeatherComponent implements OnInit {
 
   ngOnInit() {
     this.cities$ = this.service.getCities();
-
+   
     this.city$ = this.route.paramMap
       .switchMap((params: ParamMap) => {
         // (+) before `params.get()` turns the string into a number

@@ -14,7 +14,11 @@ export class City {
     public temperature: number = 0,
     public min_temp: number = 0,
     public max_temp: number = 0,
-    public icon: string = 'Undefined') { }
+    public icon: string = 'Undefined',
+    public img: string = '',
+    public day: string = '',
+    public date: Date = new Date()
+  ) { }
 }
 
 // Cities woeid will be retrieved with http://localhost:9200/weather.php?command=search&keyword=dublin
@@ -29,6 +33,7 @@ export class WeatherService {
   public cities: Array<City> = [];
   headers = new HttpHeaders();
   ids: Array<number> = [];
+  days: Array<string> = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   // Retrieve default cities information
   getCities() {
@@ -48,9 +53,19 @@ export class WeatherService {
           this.http.get(srvUrl + 'command=location&woeid=' + this.woeid,
             { headers: this.headers }).subscribe(cityData => {
 
+
               // Read the result field from the JSON response.
               const tmp = cityData['consolidated_weather'][0];
-              this.tmpCity = new City(tmp.id, this.woeid, data[0].title, tmp.the_temp, tmp.min_temp, tmp.max_temp, tmp.weather_state_name);
+              const d = new Date(tmp.applicable_date);
+
+              this.tmpCity = new City(tmp.id, this.woeid,
+                data[0].title, tmp.the_temp,
+                tmp.min_temp, tmp.max_temp,
+                tmp.weather_state_name,
+                tmp.weather_state_abbr,
+                this.days[d.getDay()],
+                tmp.applicable_date
+              );
               this.cities.push(this.tmpCity);
             });
         });

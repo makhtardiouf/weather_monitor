@@ -1,4 +1,5 @@
 <h2>Cities</h2>
+<p>Loading data... please be patient</p>
 
 <div class="row  pull-right">
   <div class="col-md-10">
@@ -23,17 +24,19 @@
     <th>Min Temp</th>
     <th>Max Temp</th>
     <th>Icon</th>
+    <th>Applicable date</th>
   </tr>
 
   <tr *ngFor="let city of cities$ | async">
     <td [class.selected]="city.woeid === selectedId">
-      <a [routerLink]="['/wea', city.woeid]">{{ city.name }}</a>
+      <a [routerLink]="['#/weather', city.woeid]">{{ city.name }}</a>
     </td>
     <td>{{ city.temperature.toPrecision(3) }}</td>
 
     <td>{{ city.min_temp.toPrecision(3) }}</td>
     <td>{{ city.max_temp.toPrecision(3) }}</td>
-    <td>{{ city.icon }} </td>
+    <td><img src="https://www.metaweather.com/static/img/weather/{{city.img}}.svg" height="30px;"> {{ city.icon }} </td>
+    <td> {{ city.day}}, {{city.date}} </td>
   </tr>
 
 </table>
