@@ -4,65 +4,102 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { setTimeout } from 'timers';
 
 export class City {
   constructor(
-    public id: number,
-    public name: string,
-    public temperature: number,
-    public min_temp: number,
-    public max_temp: number,
-    public icon: string) { }
+    public id: number = 0,
+    public name: string = 'Undefined',
+    public temperature: number = 0,
+    public min_temp: number = 0,
+    public max_temp: number = 0,
+    public icon: string = 'Undefined') { }
 }
 
-// const CITIES = [
-//   new City(1, 'Paris', 10, 50, 5, 'sun')
-// ];
+// Cities woeid will be retrieved with http://localhost:9200/weather.php?command=search&keyword=dublin
 
-// Cities woeid to be retrieved with http://localhost:9200/weather.php?command=search&keyword=dublin
-
-const targets = ['Istanbul', 'Berlin', 'London', 'Helsinki', 'Dublin', 'Vancouver'];
+const defaultCities = ['Istanbul', 'Berlin', 'London', 'Helsinki', 'Dublin', 'Vancouver'];
+const srvUrl = 'http://localhost:9200/weather.php?';
 
 @Injectable()
 export class WeatherService {
-  public cities: Array<City> = [];
   tmpCity: City;
   woeid: number;
+  public cities: Array<City> = [];
+  headers = new HttpHeaders();
+  ids: Array<number> = [];
 
   getCities() {
-    const headers = new HttpHeaders();
-    headers.append('Access-Control-Allow-Headers', 'Content-Type');
-    headers.append('Access-Control-Allow-Methods', 'GET');
-    headers.append('Access-Control-Allow-Origin', '*');
 
-    targets.forEach(el => {
-      this.http.get('http://localhost:9200/weather.php?command=search&keyword=' + el,
-        { headers: headers }).subscribe(data => {
+    defaultCities.forEach(el => {
+
+      this.http.get(srvUrl + 'command=search&keyword=' + el,
+        { headers: this.headers }).subscribe(data => {
           if (!data) {
+            console.log('No data retrieved for keyword', el);
             return;
           }
 
           this.woeid = data[0].woeid;
           console.log(data[0].title, ' => ', this.woeid);
-          
-          this.http.get('http://localhost:9200/weather.php?command=location&woeid=' + this.woeid,
-            { headers: headers }).subscribe(cityData => {
-              // Read the result field from the JSON response.
-              const tmp = cityData['consolidated_weather'][0];
-              this.tmpCity = new City(tmp.id, tmp.title, tmp.the_temp, tmp.min_temp, tmp.max_temp, tmp.weather_state_name);
-              this.cities.push(this.tmpCity);
-            });
 
+          this.http.get(srvUrl + 'command=location&woeid=' + this.woeid,
+          { headers: this.headers }).subscribe(cityData => {
+
+            // Read the result field from the JSON response.
+            const tmp = cityData['consolidated_weather'][0];
+            this.tmpCity = new City(tmp.id, data[0].title, tmp.the_temp, tmp.min_temp, tmp.max_temp, tmp.weather_state_name);
+            this.cities.push(this.tmpCity);
+          });
         });
     });
-    console.log(this.cities);
-    return Observable.of(this.cities);
+
+    //return this.cities;
+     return Observable.of(this.cities);
   }
 
 
-  getCity(id: number | string) {
+  getCity(id: number): City {
+
+    this.http.get(srvUrl + 'command=location&woeid=' + id,
+      { headers: this.headers }).subscribe(data => {
+        if (!data) {
+          console.log('No data retrieved for woeid', id);
+          return new City();
+        }
+        try {
+          // Read the result field from the JSON response.
+          const tmp = data['consolidated_weather'][0];
+          if (!tmp) {
+            console.log('No data retrieved for woeid', id, data['consolidated_weather']);
+            return new City();
+          }
+
+          this.tmpCity = new City(tmp.id,
+            data[0].title,
+            tmp.the_temp,
+            tmp.min_temp, tmp.max_temp,
+            tmp.weather_state_name);
+
+          this.cities.push(this.tmpCity);
+          Observable.of(this.cities);
+          return this.tmpCity;
+
+        } catch (e) {
+          return new City();
+        }
+      });
+
+    console.log('Early return for woeid', id);
+    return new City();
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+    this.headers.append('Access-Control-Allow-Headers', 'Content-Type');
+    this.headers.append('Access-Control-Allow-Methods', 'GET');
+    this.headers.append('Access-Control-Allow-Origin', '*');
+
+  }
 
 }
