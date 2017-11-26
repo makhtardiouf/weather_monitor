@@ -1,4 +1,13 @@
 
-<h5>
-    Welcome to {{ title }}!
-</h5>
+<h2>Cities</h2>
+<ul class="items">
+  <li *ngFor="let city of cities$ | async"
+    [class.selected]="city.id === selectedId">
+    <a [routerLink]="['/city', city.id]">
+      <span class="badge">{{ city.id }} </span> {{ city.name }}: {{ city.temperature }},
+       {{ city.min_temp }}, {{ city.max_temp }}, {{ city.icon }}
+    </a>
+  </li>
+</ul>
+
+<button class="btn" routerLink="/#">Back</button>

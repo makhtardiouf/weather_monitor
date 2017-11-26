@@ -21,12 +21,20 @@ $validCommands = [
 
 $command = isset($_GET['command']) ? $_GET['command'] : null;
 $baseUrl = 'https://www.metaweather.com/api/location/';
+$frontEndUrl = 'http://localhost:4200';
 
 /**
  * Functions
  */
 function quitWithResponse($output, $code = 200) {
+	global $frontEndUrl;
+   
 	header('Content-Type: text/json');
+	header("Access-Control-Allow-Origin: {$frontEndUrl}");
+    header("Access-Control-Allow-Credentials: true");
+    header('Access-Control-Allow-Methods: GET');
+	header('Access-Control-Allow-Headers: Content-Type, Accept');
+	
 	http_response_code($code);
 	echo $output;
 	exit;
