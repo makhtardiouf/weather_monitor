@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +9,7 @@
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
- 
+
   <base href="/">
 </head>
 
@@ -24,17 +25,14 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
+        <router-outlet></router-outlet>
         <a class="navbar-brand" routerLink="/#" routerLinkActive="active">Makhtar's Weather App</a>
       </div>
 
       <div class="collapse navbar-collapse" id="navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a routerLink="/#/weather/:woeid" routerLinkActive="active">Query Location</a>
-          </li>
-
-          <li>
-            <a href="">Query id</a>
+            <a href="/weather/44418">Query Location</a>
           </li>
 
         </ul>
@@ -44,35 +42,27 @@
   </nav>
 
   <div class="container" style="padding:50px;">
-      <router-outlet></router-outlet>
-      <div style="text-align:center">          
-        <img width="100" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-      </div>
+    <div style="text-align:center">
+      <img width="100" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+    </div>
 
-      <div class="row">
-          <weather></weather>
-          <!-- <app-city *ngIf="city$"></app-city> -->
-          <app-root></app-root>
-      </div>
+    <div class="row" *ngIf="cities$">
+      <weather></weather>
+    </div>
 
-      <ul>
-          <li>
-            <h5><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h5>
-          </li>
-          <li>
-            <h5><a target="_blank" rel="noopener" href="https://angular.io">Angular WebSite</a></h5>
-          </li>
-        </ul>
+    <div class="row" *ngIf="city$">
+      <app-city></app-city>
+    </div>
 
   </div>
 
   <hr/>
-  
-    <div class="container">
-      &copy; 2017 Created by Makhtar Diouf
-      <br/>
-    </div>
-  
+
+  <div class="container">
+    &copy; 2017 Created by Makhtar Diouf
+    <br/>
+  </div>
+
 </body>
 
 </html>

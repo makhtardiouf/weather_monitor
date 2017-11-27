@@ -6,37 +6,33 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { City, WeatherService } from './weather.service';
 
 @Component({
-  selector: 'app-root', // 'weather',
+  selector: 'weather',
   templateUrl: './weather.component.html',
   styleUrls: ['./weather.component.css']
 })
 export class WeatherComponent implements OnInit {
   title = 'Makhtar\'s Weather Demo app';
-
   cities$: Observable<City[]>;
   city$: Observable<City>;
-
+  statusMsg$: Observable<string>;
 
   private woeid: number;
 
-  constructor(
-    private service: WeatherService,
-    private route: ActivatedRoute
-  ) { }
+  constructor(private service: WeatherService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.cities$ = this.service.getCities();
-   
-    this.city$ = this.route.paramMap
-      .switchMap((params: ParamMap) => {
-        // (+) before `params.get()` turns the string into a number
-        this.woeid = +params.get('woeid');
-        return this.service.getCity(565346);
+    this.statusMsg$ = this.service.statusMsg;
 
-      });
-  }
-
-  queryId(id: number) {
-    console.log('Querying weather data...');
+    // this.city$ = this.route.paramMap
+    //   .switchMap((params: ParamMap) => {
+    //     // (+) before `params.get()` turns the string into a number
+    //     this.woeid = +params.get('woeid');
+    //     if (this.woeid === 0 || !this.woeid ) {
+    //       // default for testing
+    //       this.woeid = 565346;
+    //     }
+    //     return this.service.getCity(this.woeid);
+    //   });
   }
 }

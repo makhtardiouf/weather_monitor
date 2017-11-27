@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root', // weather 
+  selector: 'weather',
   template: ``,
 })
 export class AppComponent {
